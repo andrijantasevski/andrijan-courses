@@ -1,11 +1,15 @@
 ---
 import Layout from "@layouts/Layout.astro";
 
+export interface Course {
+  courseTitle: string;
+}
+
 const { course } = Astro.params;
 
 const coursePath = `content/courses/${course}`;
 
-const courses = await Astro.glob("/content/courses/*/*.mdx");
+const courses = await Astro.glob<Course>("/content/courses/*/*.mdx");
 
 const courseFiltered = courses.find((course) =>
   course.url?.includes(coursePath)
@@ -21,6 +25,6 @@ if (!courseFiltered) {
 const { Content, frontmatter } = courseFiltered;
 ---
 
-<Layout title={frontmatter.title}>
-  <Content />
+<Layout title={frontmatter.courseTitle}>
+  <p>{frontmatter.courseTitle}</p>
 </Layout>
