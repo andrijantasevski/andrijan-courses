@@ -9,7 +9,7 @@ const { course } = Astro.params;
 
 const coursePath = `content/courses/${course}`;
 
-const courses = await Astro.glob<Course>("/content/courses/*/*.mdx");
+const courses = await Astro.glob<Course>("/content/courses/*/index.mdx");
 
 const courseFiltered = courses.find((course) =>
   course.url?.includes(coursePath)
@@ -22,7 +22,7 @@ if (!courseFiltered) {
   });
 }
 
-const { Content, frontmatter } = courseFiltered;
+const { frontmatter } = courseFiltered;
 ---
 
 <Layout title={frontmatter.courseTitle}>

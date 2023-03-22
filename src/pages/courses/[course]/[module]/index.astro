@@ -1,0 +1,48 @@
+---
+import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
+
+export interface Module {
+  moduleTitle: string;
+}
+
+const { course, module } = Astro.params;
+
+const modulePath = `content/courses/${course}/${module}`;
+
+const modules = await Astro.glob<Module>("/content/courses/*/*/index.mdx");
+
+const moduleFiltered = modules.find((module) =>
+  module.url?.includes(modulePath)
+);
+
+if (!moduleFiltered) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const lessons = await Astro.glob("/content/courses/*/*/*.mdx");
+
+const lessonsPerModule = lessons.filter((lesson) => {
+  if (lesson.url?.includes(modulePath) && !lesson.url?.includes("index.mdx")) {
+    return {
+      ...lesson,
+    };
+  }
+});
+
+const { frontmatter } = moduleFiltered;
+---
+
+<LayoutFocusMode title={frontmatter.moduleTitle}>
+  <p>{frontmatter.moduleTitle}</p>
+
+  <div>
+    {
+      lessonsPerModule.map((lessonPerModule) => (
+        <p>{lessonPerModule.frontmatter.lessonTitle}</p>
+      ))
+    }
+  </div>
+</LayoutFocusMode>
