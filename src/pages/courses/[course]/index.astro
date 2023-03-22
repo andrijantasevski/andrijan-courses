@@ -1,15 +1,26 @@
 ---
-const data = await Astro.glob(
-  "/content/courses/deploying-an-ubuntu-server/index.mdx"
+import Layout from "@layouts/Layout.astro";
+
+const { course } = Astro.params;
+
+const coursePath = `content/courses/${course}`;
+
+const courses = await Astro.glob("/content/courses/*/*.mdx");
+
+const courseFiltered = courses.find((course) =>
+  course.url?.includes(coursePath)
 );
 
-const Content = data[0].Content;
+if (!courseFiltered) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
 
-const catFact = await fetch("https://catfact.ninja/fact").then((res) =>
-  res.json()
-);
+const { Content, frontmatter } = courseFiltered;
 ---
 
-<Content />
-
-{catFact.fact}
+<Layout title={frontmatter.title}>
+  <Content />
+</Layout>
