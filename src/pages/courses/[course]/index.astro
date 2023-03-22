@@ -1,0 +1,15 @@
+---
+const data = await Astro.glob(
+  "/content/courses/deploying-an-ubuntu-server/index.mdx"
+);
+
+const Content = data[0].Content;
+
+const catFact = await fetch("https://catfact.ninja/fact").then((res) =>
+  res.json()
+);
+---
+
+<Content />
+
+{catFact.fact}
