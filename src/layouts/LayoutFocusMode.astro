@@ -1,4 +1,8 @@
 ---
+import Scripts from "@components/Scripts.astro";
+import Link from "@components/ui/Link.astro";
+import DarkModeToggler from "@components/ui/ThemeToggler";
+
 export interface Props {
   title: string;
 }
@@ -14,8 +18,30 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+
+    <Scripts />
   </head>
-  <body>
-    <slot />
+  <body class="relative bg-white text-black dark:bg-black dark:text-neutral-50">
+    <main class="flex">
+      <aside
+        class="sticky inset-y-0 hidden h-screen w-96 shrink-0 bg-neutral-100 p-6 dark:bg-neutral-900 lg:block"
+      >
+        <div class="flex items-center justify-between">
+          <Link
+            title="Go to homepage"
+            class="text-xl"
+            href="/"
+            ariaLabel="Go to homepage"
+          >
+            learnweb
+          </Link>
+          <DarkModeToggler client:load />
+        </div>
+      </aside>
+
+      <div class="w-full">
+        <slot />
+      </div>
+    </main>
   </body>
 </html>

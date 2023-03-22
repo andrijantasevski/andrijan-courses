@@ -26,7 +26,9 @@ const { frontmatter, Content } = lessonFiltered;
 ---
 
 <LayoutFocusMode title={frontmatter.lessonTitle}>
-  <p>{frontmatter.lessonTitle}</p>
-
-  <Content />
+  <div class="mx-auto w-11/12 max-w-3xl py-10">
+    <article class="prose max-w-none">
+      <Content />
+    </article>
+  </div>
 </LayoutFocusMode>
