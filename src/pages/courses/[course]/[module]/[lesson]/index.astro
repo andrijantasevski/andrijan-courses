@@ -1,5 +1,4 @@
 ---
-import Layout from "@layouts/Layout.astro";
 import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
 
 export interface Lesson {
@@ -26,10 +25,10 @@ if (!lessonFiltered) {
 const { frontmatter, Content } = lessonFiltered;
 ---
 
-<Layout title={frontmatter.lessonTitle}>
+<LayoutFocusMode title={frontmatter.lessonTitle}>
   <div class="mx-auto w-11/12 max-w-3xl py-10">
     <article class="prose max-w-none">
       <Content />
     </article>
   </div>
-</Layout>
+</LayoutFocusMode>
