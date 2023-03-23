@@ -1,5 +1,6 @@
 ---
 import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
+import { generateCourseTree } from "src/utils/generateCourseTree.astro";
 
 export interface Module {
   moduleTitle: string;
@@ -33,9 +34,11 @@ const lessonsPerModule = lessons.filter((lesson) => {
 });
 
 const { frontmatter } = moduleFiltered;
+
+const courseTree = await generateCourseTree();
 ---
 
-<LayoutFocusMode title={frontmatter.moduleTitle}>
+<LayoutFocusMode courseTree={courseTree} title={frontmatter.moduleTitle}>
   <p>{frontmatter.moduleTitle}</p>
 
   <div>

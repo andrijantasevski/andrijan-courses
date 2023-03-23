@@ -1,5 +1,6 @@
 ---
 import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
+import { generateCourseTree } from "src/utils/generateCourseTree.astro";
 
 export interface Lesson {
   lessonTitle: string;
@@ -23,9 +24,11 @@ if (!lessonFiltered) {
 }
 
 const { frontmatter, Content } = lessonFiltered;
+
+const courseTree = await generateCourseTree();
 ---
 
-<LayoutFocusMode title={frontmatter.lessonTitle}>
+<LayoutFocusMode courseTree={courseTree} title={frontmatter.lessonTitle}>
   <div class="mx-auto w-11/12 max-w-3xl py-10">
     <article class="prose max-w-none">
       <Content />

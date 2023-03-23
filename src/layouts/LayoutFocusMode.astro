@@ -1,13 +1,34 @@
 ---
 import Scripts from "@components/Scripts.astro";
+import ModuleLessonToggle from "@components/focus-mode/ModuleLessonToggle";
 import Link from "@components/ui/Link.astro";
-import DarkModeToggler from "@components/ui/ThemeToggler";
+import ThemeToggler from "@components/ui/ThemeToggler";
 
 export interface Props {
   title: string;
+  courseTree: {
+    course: {
+      courseUrl: string;
+      courseTitle: any;
+    };
+    modules: {
+      lessons: (
+        | {
+            lessonUrl: string | undefined;
+            lessonTitle: any;
+          }
+        | undefined
+      )[];
+      moduleUrl: string;
+      moduleTitle: any;
+    }[];
+  }[];
 }
+const url = Astro.url.pathname;
 
-const { title } = Astro.props;
+const { title, courseTree } = Astro.props;
+
+const { course, modules } = courseTree[0];
 ---
 
 <!DOCTYPE html>
@@ -24,9 +45,9 @@ const { title } = Astro.props;
   <body class="relative bg-white text-black dark:bg-black dark:text-neutral-50">
     <main class="flex">
       <aside
-        class="sticky inset-y-0 hidden h-screen w-96 shrink-0 bg-neutral-100 p-6 dark:bg-neutral-900 lg:block"
+        class="sticky inset-y-0 hidden h-screen w-96 shrink-0 flex-col gap-6 overflow-y-auto bg-neutral-100 py-6 dark:bg-neutral-900 lg:flex"
       >
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between px-6">
           <Link
             title="Go to homepage"
             class="text-xl"
@@ -35,7 +56,27 @@ const { title } = Astro.props;
           >
             learnweb
           </Link>
-          <DarkModeToggler client:idle />
+
+          <ThemeToggler client:load />
+        </div>
+
+        <div class="px-6">
+          <Link
+            href={course.courseUrl}
+            title="Go to course page"
+            ariaLabel="Go to course page"
+            class="text-2xl"
+          >
+            {course.courseTitle}
+          </Link>
+        </div>
+
+        <div>
+          {
+            modules.map((module) => (
+              <ModuleLessonToggle url={url} module={module} />
+            ))
+          }
         </div>
       </aside>
 

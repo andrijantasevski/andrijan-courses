@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function DarkModeToggler() {
+export default function ThemeToggler() {
   const [theme, setTheme] = useState("light");
   const [isMounted, setIsMounted] = useState(false);
 
@@ -15,6 +15,7 @@ export default function DarkModeToggler() {
       } else {
         document.documentElement.classList.remove("dark");
       }
+
       localStorage.setItem("theme", theme);
     }
 
