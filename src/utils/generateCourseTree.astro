@@ -4,6 +4,10 @@ export async function generateCourseTree() {
     return url.replace(/^content\/|\/index\.mdx$/g, "/");
   }
 
+  function cleanUpUrlFromContentAndMDX(url: string) {
+    return url.replace(/^content\/|(\/index)?\.mdx$/g, "/");
+  }
+
   const courses = await Astro.glob("/content/courses/*/index.mdx");
 
   const modules = await Astro.glob("/content/courses/*/*/index.mdx");
@@ -27,7 +31,7 @@ export async function generateCourseTree() {
   const lessonsObjects = lessons.map((lesson) => {
     if (!lesson.url?.includes("index.mdx")) {
       return {
-        lessonUrl: lesson.url?.split("content")[1],
+        lessonUrl: cleanUpUrlFromContentAndMDX(lesson.url ?? ""),
         lessonTitle: lesson.frontmatter.lessonTitle,
       };
     }

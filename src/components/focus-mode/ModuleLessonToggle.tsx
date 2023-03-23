@@ -25,8 +25,9 @@ export default function ModuleLessonToggle({ url, module }: Props) {
   function toggleModule(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) {
-    setIsModuleOpen((prevModuleState) => !prevModuleState);
     event.preventDefault();
+    event.nativeEvent.stopImmediatePropagation();
+    setIsModuleOpen((prevModuleState) => !prevModuleState);
   }
 
   return (
@@ -36,37 +37,56 @@ export default function ModuleLessonToggle({ url, module }: Props) {
         aria-label="Go to module page"
         href={moduleUrl}
         className={`mr-6 flex items-center justify-between rounded-tr-lg rounded-br-lg py-3 pl-6 pr-3 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800 ${
-          moduleUrl === url ? "bg-neutral-200 dark:bg-neutral-800" : ""
+          moduleUrl === url || (!isModuleOpen && isModuleActive)
+            ? "bg-neutral-200 dark:bg-neutral-800"
+            : ""
         }`}
       >
         <span>{moduleTitle}</span>
 
         <button
-          title={`${isModuleOpen ? "Close module" : "Show module"}`}
+          title={`${isModuleOpen ? "Hide module" : "Show module"}`}
           aria-label={`${isModuleOpen ? "Close module" : "Show module"}`}
           className="flex items-center justify-center rounded-lg p-1 transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-700"
           onClick={toggleModule}
         >
           <span className="sr-only">
-            {isModuleOpen ? "Close module" : "Show module"}
+            {isModuleOpen ? "Hide module" : "Show module"}
           </span>
 
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className={`h-5 w-5 transition-transform ${
-              isModuleOpen ? "rotate-180 transform" : ""
-            }`}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-            />
-          </svg>
+          {isModuleOpen && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4.5 15.75l7.5-7.5 7.5 7.5"
+              />
+            </svg>
+          )}
+
+          {!isModuleOpen && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className={`h-5 w-5 text-neutral-400`}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+              />
+            </svg>
+          )}
         </button>
       </a>
 

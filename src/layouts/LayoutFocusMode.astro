@@ -74,7 +74,7 @@ const { course, modules } = courseTree[0];
         <div>
           {
             modules.map((module) => (
-              <ModuleLessonToggle url={url} module={module} />
+              <ModuleLessonToggle client:load url={url} module={module} />
             ))
           }
         </div>
