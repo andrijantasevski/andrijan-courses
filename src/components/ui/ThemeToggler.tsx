@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function DarkModeToggler() {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "light");
+  const [theme, setTheme] = useState("light");
   const [isMounted, setIsMounted] = useState(false);
 
   const toggleDarkMode = () => {
@@ -9,12 +9,14 @@ export default function DarkModeToggler() {
   };
 
   useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
+    if (isMounted) {
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      localStorage.setItem("theme", theme);
     }
-    localStorage.setItem("theme", theme);
 
     const css = document.createElement("style");
     css.type = "text/css";
@@ -37,6 +39,8 @@ export default function DarkModeToggler() {
 
   useEffect(() => {
     setIsMounted(true);
+
+    setTheme(localStorage.getItem("theme") ?? "light");
   }, []);
 
   return (

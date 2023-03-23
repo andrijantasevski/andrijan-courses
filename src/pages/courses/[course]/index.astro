@@ -28,8 +28,4 @@ const { frontmatter } = courseFiltered;
 
 <Layout title={frontmatter.courseTitle}>
   <p>{frontmatter.courseTitle}</p>
-
-  <DarkModeToggler client:idle />
-  <DarkModeToggler client:load />
-  <DarkModeToggler client:only />
 </Layout>
