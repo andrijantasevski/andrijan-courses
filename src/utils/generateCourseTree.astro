@@ -1,0 +1,64 @@
+---
+export async function generateCourseTree() {
+  function cleanUpUrlFromContentAndIndex(url: string) {
+    return url.replace(/^content\/|\/index\.mdx$/g, "/");
+  }
+
+  function cleanUpUrlFromContentAndMDX(url: string) {
+    return url.replace(/^content\/|(\/index)?\.mdx$/g, "/");
+  }
+
+  const courses = await Astro.glob("/content/courses/*/index.mdx");
+
+  const modules = await Astro.glob("/content/courses/*/*/index.mdx");
+
+  const lessons = await Astro.glob("/content/courses/*/*/*.mdx");
+
+  const coursesObjects = courses.map((course) => {
+    return {
+      courseUrl: cleanUpUrlFromContentAndIndex(course.url ?? ""),
+      courseTitle: course.frontmatter.courseTitle,
+    };
+  });
+
+  const modulesObjects = modules.map((module) => {
+    return {
+      moduleUrl: cleanUpUrlFromContentAndIndex(module.url ?? ""),
+      moduleTitle: module.frontmatter.moduleTitle,
+    };
+  });
+
+  const lessonsObjects = lessons.map((lesson) => {
+    if (!lesson.url?.includes("index.mdx")) {
+      return {
+        lessonUrl: cleanUpUrlFromContentAndMDX(lesson.url ?? ""),
+        lessonTitle: lesson.frontmatter.lessonTitle,
+      };
+    }
+  });
+
+  const coursesData = coursesObjects.map((course) => {
+    const modulesPerCourse = modulesObjects.filter((module) =>
+      module.moduleUrl.includes(course.courseUrl)
+    );
+
+    const modules = modulesPerCourse.map((module) => {
+      const filteredLessons = lessonsObjects.filter((lesson) =>
+        lesson?.lessonUrl?.includes(module.moduleUrl)
+      );
+
+      return {
+        ...module,
+        lessons: filteredLessons,
+      };
+    });
+
+    return {
+      course,
+      modules,
+    };
+  });
+
+  return coursesData;
+}
+---
