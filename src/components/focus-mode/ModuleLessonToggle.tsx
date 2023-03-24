@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
   url: string;
@@ -90,24 +91,55 @@ export default function ModuleLessonToggle({ url, module }: Props) {
         </button>
       </a>
 
-      {isModuleOpen && (
-        <>
-          {lessons.map((lesson) => (
-            <div key={lesson?.lessonUrl}>
-              <a
-                href={lesson?.lessonUrl}
-                className={`mr-6 flex items-center justify-between rounded-tr-lg rounded-br-lg py-3 pl-9 pr-3 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800 ${
-                  lesson?.lessonUrl === url
-                    ? "bg-neutral-200 dark:bg-neutral-800"
-                    : ""
-                }`}
-              >
-                {lesson?.lessonTitle}
-              </a>
-            </div>
-          ))}
-        </>
-      )}
+      {lessons.map((lesson) => (
+        <motion.div
+          initial={false}
+          animate={
+            isModuleOpen
+              ? {
+                  height: "auto",
+                  opacity: 1,
+                  display: "block",
+                  transition: {
+                    height: {
+                      duration: 0.2,
+                    },
+                    opacity: {
+                      duration: 0.25,
+                      delay: 0.15,
+                    },
+                  },
+                }
+              : {
+                  height: 0,
+                  opacity: 0,
+                  transition: {
+                    height: {
+                      duration: 0.2,
+                    },
+                    opacity: {
+                      duration: 0.25,
+                    },
+                  },
+                  transitionEnd: {
+                    display: "none",
+                  },
+                }
+          }
+          key={lesson?.lessonUrl}
+        >
+          <a
+            href={lesson?.lessonUrl}
+            className={`mr-6 flex items-center justify-between rounded-tr-lg rounded-br-lg py-3 pl-9 pr-3 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-800 ${
+              lesson?.lessonUrl === url
+                ? "bg-neutral-200 dark:bg-neutral-800"
+                : ""
+            }`}
+          >
+            {lesson?.lessonTitle}
+          </a>
+        </motion.div>
+      ))}
     </div>
   );
 }

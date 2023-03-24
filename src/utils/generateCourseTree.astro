@@ -1,13 +1,6 @@
 ---
-export async function generateCourseTreeAstro() {
-  function cleanUpUrlFromContentAndIndex(url: string) {
-    return url.replace(/^content\/|\/index\.mdx$/g, "/");
-  }
-
-  function cleanUpUrlFromContentAndMDX(url: string) {
-    return url.replace(/^content\/|(\/index)?\.mdx$/g, "/");
-  }
-
+import { cleanUpUrlFromContentAndMDX } from "./generateCourseTree";
+export async function generateCourseTree() {
   const courses = await Astro.glob("/content/courses/*/index.mdx");
 
   const modules = await Astro.glob("/content/courses/*/*/index.mdx");
@@ -16,14 +9,14 @@ export async function generateCourseTreeAstro() {
 
   const coursesObjects = courses.map((course) => {
     return {
-      courseUrl: cleanUpUrlFromContentAndIndex(course.url ?? ""),
+      courseUrl: cleanUpUrlFromContentAndMDX(course.url ?? ""),
       courseTitle: course.frontmatter.courseTitle,
     };
   });
 
   const modulesObjects = modules.map((module) => {
     return {
-      moduleUrl: cleanUpUrlFromContentAndIndex(module.url ?? ""),
+      moduleUrl: cleanUpUrlFromContentAndMDX(module.url ?? ""),
       moduleTitle: module.frontmatter.moduleTitle,
     };
   });

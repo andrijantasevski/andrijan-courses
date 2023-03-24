@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { cleanUpUrlFromContentAndMDX } from "./generateCoursesTrees";
+import { cleanUpUrlFromContentAndMDX } from "./generateCourseTree";
 
 describe("clean up url from content and .mdx", () => {
   it("should return a url without content and index.mdx in it", () => {
