@@ -3,8 +3,14 @@ import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
 import { generateCourseTree } from "src/utils/generateCourseTree.astro";
 import type { Module } from "src/types/types";
 
-
 const { course, module } = Astro.params;
+
+if (!course || !module) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
 
 const modulePath = `content/courses/${course}/${module}`;
 
@@ -33,7 +39,7 @@ const lessonsPerModule = lessons.filter((lesson) => {
 
 const { frontmatter } = moduleFiltered;
 
-const courseTree = await generateCourseTree();
+const courseTree = await generateCourseTree(course);
 ---
 
 <LayoutFocusMode courseTree={courseTree} title={frontmatter.moduleTitle}>

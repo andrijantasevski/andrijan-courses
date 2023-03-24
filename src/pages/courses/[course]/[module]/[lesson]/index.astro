@@ -5,6 +5,13 @@ import type { Lesson } from "src/types/types";
 
 const { course, module, lesson } = Astro.params;
 
+if (!course || !module || !lesson) {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
 const lessonPath = `/courses/${course}/${module}/${lesson}`;
 
 const lessons = await Astro.glob<Lesson>("/content/courses/*/*/*.mdx");
@@ -20,9 +27,11 @@ if (!lessonFiltered) {
   });
 }
 
-const { frontmatter, Content } = lessonFiltered;
+const { frontmatter, Content, getHeadings } = lessonFiltered;
 
-const courseTree = await generateCourseTree();
+const headings = getHeadings();
+
+const courseTree = await generateCourseTree(course);
 ---
 
 <LayoutFocusMode courseTree={courseTree} title={frontmatter.lessonTitle}>
