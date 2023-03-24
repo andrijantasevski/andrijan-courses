@@ -3,11 +3,6 @@ import Scripts from "@components/Scripts.astro";
 import ModuleLessonToggle from "@components/focus-mode/ModuleLessonToggle";
 import Link from "@components/ui/Link.astro";
 import ThemeToggler from "@components/ui/ThemeToggler";
-import { createFile } from "@utils/generateCoursesModulesLessons";
-
-if (import.meta.env.DEV) {
-  createFile();
-}
 
 export interface Props {
   title: string;
