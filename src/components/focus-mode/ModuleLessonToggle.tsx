@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface Props {
   url: string;
@@ -79,7 +79,7 @@ export default function ModuleLessonToggle({ url, module }: Props) {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className={`h-5 w-5 text-neutral-400`}
+              className={`h-5 w-5`}
             >
               <path
                 strokeLinecap="round"
@@ -105,7 +105,7 @@ export default function ModuleLessonToggle({ url, module }: Props) {
                       duration: 0.2,
                     },
                     opacity: {
-                      duration: 0.25,
+                      duration: 0.1,
                       delay: 0.15,
                     },
                   },
@@ -118,7 +118,7 @@ export default function ModuleLessonToggle({ url, module }: Props) {
                       duration: 0.2,
                     },
                     opacity: {
-                      duration: 0.25,
+                      duration: 0.1,
                     },
                   },
                   transitionEnd: {

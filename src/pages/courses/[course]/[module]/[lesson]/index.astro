@@ -1,10 +1,7 @@
 ---
 import LayoutFocusMode from "@layouts/LayoutFocusMode.astro";
 import { generateCourseTree } from "src/utils/generateCourseTree.astro";
-
-export interface Lesson {
-  lessonTitle: string;
-}
+import type { Lesson } from "src/types/types";
 
 const { course, module, lesson } = Astro.params;
 

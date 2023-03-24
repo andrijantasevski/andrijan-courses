@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { cleanUpUrlFromContentAndMDX } from "./generateCourseTree";
+import chokidar from "chokidar";
 
 describe("clean up url from content and .mdx", () => {
   it("should return a url without content and index.mdx in it", () => {
