@@ -1,18 +1,14 @@
-import { cleanUpUrlFromContentAndMDX } from "@utils/generateCourseTree";
-import type { APIRoute, MDXInstance } from "astro";
-import type { Course } from "src/types/types";
+import type { APIRoute } from "astro";
+import { getCollection } from "astro:content";
 
-export const get: APIRoute = ({ params, request }) => {
-  const coursesData: MDXInstance<Course>[] = Object.values(
-    import.meta.glob("./../../../content/courses/*/index.mdx", {
-      eager: true,
-    })
-  );
+export const get: APIRoute = async ({ params, request }) => {
+  const coursesCollection = await getCollection("courses");
 
-  const courses = coursesData.map((course) => {
+  const courses = coursesCollection.map((course) => {
     return {
-      courseUrl: cleanUpUrlFromContentAndMDX(course.url ?? "/"),
-      courseTitle: course.frontmatter.courseTitle,
+      id: course.id,
+      courseUrl: `/courses/${course.slug}`,
+      courseTitle: course.data.courseTitle,
     };
   });
 
