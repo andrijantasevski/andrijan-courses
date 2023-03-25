@@ -44,7 +44,7 @@ export async function generateCourseTree(course: string) {
         lesson?.lessonUrl?.includes(module.moduleUrl)
       );
 
-      const sortedLessons = filteredLessons.sort((a, b) => a?.lessonOrder - b?.lessonOrder)
+      const sortedLessons = filteredLessons.sort((a, b) => (a?.lessonOrder as number) - (b?.lessonOrder as number))
 
       return {
         ...module,
