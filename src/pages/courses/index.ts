@@ -4,11 +4,15 @@ import { getCollection } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
 import { transformCourse } from "@utils/dataTransformers";
+import { getRuntime, PagesRuntime } from "@astrojs/cloudflare/runtime";
 
 export const get: APIRoute = async ({ request }) => {
   const apiSecretKey = request.headers.get("X-API-KEY");
 
-  if (!import.meta.env.API_SECRET_KEY) {
+  const runtime = getRuntime(request);
+
+  // @ts-ignore
+  if (runtime.env.API_SECRET_KEY) {
     return errorResponse({ errorMessage: "No env variable.", statusCode: 404 });
   }
 
