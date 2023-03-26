@@ -13,7 +13,10 @@ export const get: APIRoute = async ({ request }) => {
 
   // @ts-ignore
   if (runtime.env.API_SECRET_KEY) {
-    return errorResponse({ errorMessage: "No env variable.", statusCode: 404 });
+    return errorResponse({
+      errorMessage: "There's an env variable here!",
+      statusCode: 404,
+    });
   }
 
   if (
