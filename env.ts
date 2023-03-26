@@ -11,7 +11,7 @@ if (safelyParsedSchema.success === false) {
     "❌ Invalid environment variables:",
     JSON.stringify(safelyParsedSchema.error.format(), null, 4)
   );
-  process.exit(1);
+  throw new Error();
 }
 
 export const env = safelyParsedSchema.data;
