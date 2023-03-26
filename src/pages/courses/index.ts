@@ -1,4 +1,4 @@
-import { env } from "env";
+// import { env } from "env";
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
@@ -8,7 +8,10 @@ import { transformCourse } from "@utils/dataTransformers";
 export const get: APIRoute = async ({ request }) => {
   const apiSecretKey = request.headers.get("X-API-KEY");
 
-  if (!apiSecretKey || !timingSafeEqual(apiSecretKey, env.API_SECRET_KEY)) {
+  if (
+    !apiSecretKey ||
+    !timingSafeEqual(apiSecretKey, import.meta.env.API_SECRET_KEY)
+  ) {
     return errorResponse({
       statusCode: 403,
       errorMessage: "Unauthorized access.",
