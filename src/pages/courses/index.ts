@@ -16,6 +16,13 @@ export const get: APIRoute = async ({ request }) => {
   const apiSecretKeyEnv =
     localEnv?.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;
 
+  if (!apiSecretKeyEnv) {
+    return errorResponse({
+      statusCode: 500,
+      errorMessage: "Missing API_SECRET_KEY environment variable",
+    });
+  }
+
   const apiSecretKey = request.headers.get("X-API-KEY");
 
   if (!apiSecretKey || !timingSafeEqual(apiSecretKey, apiSecretKeyEnv)) {
