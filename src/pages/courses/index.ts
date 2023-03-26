@@ -4,24 +4,20 @@ import { getCollection } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
 import { transformCourse } from "@utils/dataTransformers";
-import { getRuntime, PagesRuntime } from "@astrojs/cloudflare/runtime";
+import { getRuntime } from "@astrojs/cloudflare/runtime";
+
+interface Env {
+  API_SECRET_KEY: string;
+}
 
 export const get: APIRoute = async ({ request }) => {
+  const runtime = getRuntime<Env>(request);
+
   const apiSecretKey = request.headers.get("X-API-KEY");
-
-  const runtime = getRuntime(request);
-
-  // @ts-ignore
-  if (runtime.env.API_SECRET_KEY) {
-    return errorResponse({
-      errorMessage: "There's an env variable here!",
-      statusCode: 404,
-    });
-  }
 
   if (
     !apiSecretKey ||
-    !timingSafeEqual(apiSecretKey, import.meta.env.API_SECRET_KEY)
+    !timingSafeEqual(apiSecretKey, runtime.env.API_SECRET_KEY)
   ) {
     return errorResponse({
       statusCode: 403,
