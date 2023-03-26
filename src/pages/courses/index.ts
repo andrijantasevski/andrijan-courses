@@ -1,4 +1,3 @@
-import { env } from "env";
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
@@ -13,9 +12,12 @@ interface Env {
 export const get: APIRoute = async ({ request }) => {
   const runtime = getRuntime<Env>(request);
 
+  const apiSecretKeyEnv =
+    import.meta.env.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;
+
   const apiSecretKey = request.headers.get("X-API-KEY");
 
-  if (!apiSecretKey || !timingSafeEqual(apiSecretKey, env.API_SECRET_KEY)) {
+  if (!apiSecretKey || !timingSafeEqual(apiSecretKey, apiSecretKeyEnv)) {
     return errorResponse({
       statusCode: 403,
       errorMessage: "Unauthorized access.",

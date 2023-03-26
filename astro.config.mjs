@@ -10,9 +10,4 @@ export default defineConfig({
   output: "server",
   integrations: [tailwind(), react(), mdx()],
   adapter: cloudflare(),
-  vite: {
-    define: {
-      "process.env.RANDOM_SECRET": JSON.stringify(process.env.RANDOM_SECRET),
-    },
-  },
 });
