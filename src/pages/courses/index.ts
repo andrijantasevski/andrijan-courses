@@ -1,16 +1,30 @@
+import { env } from "env";
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import timingSafeEqual from "@utils/timingSafeEqual";
+import errorResponse from "@utils/errorResponse";
+import { transformCourse } from "@utils/dataTransformers";
 
-export const get: APIRoute = async ({ params, request }) => {
+export const get: APIRoute = async ({ request }) => {
+  const apiSecretKey = request.headers.get("X-API-KEY");
+
+  if (!apiSecretKey || !timingSafeEqual(apiSecretKey, env.API_SECRET_KEY)) {
+    return errorResponse({
+      statusCode: 403,
+      errorMessage: "Unauthorized access.",
+    });
+  }
+
   const coursesCollection = await getCollection("courses");
 
-  const courses = coursesCollection.map((course) => {
-    return {
-      id: course.id,
-      courseUrl: `/courses/${course.slug}`,
-      courseTitle: course.data.courseTitle,
-    };
-  });
+  if (coursesCollection.length === 0) {
+    return errorResponse({
+      statusCode: 404,
+      errorMessage: "Content not found.",
+    });
+  }
+
+  const courses = coursesCollection.map(transformCourse);
 
   return new Response(JSON.stringify(courses), {
     status: 200,

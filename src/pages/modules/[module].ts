@@ -1,12 +1,12 @@
 import { env } from "env";
 import type { APIRoute } from "astro";
-import { getEntryBySlug } from "astro:content";
+import { getCollection, getEntryBySlug } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
-import { transformCourse } from "@utils/dataTransformers";
+import { transformModule } from "@utils/dataTransformers";
 
 export const get: APIRoute = async ({ params, request }) => {
-  const { course } = params;
+  const { module } = params;
 
   const apiSecretKey = request.headers.get("X-API-KEY");
 
@@ -17,25 +17,29 @@ export const get: APIRoute = async ({ params, request }) => {
     });
   }
 
-  if (!course) {
+  if (!module) {
     return errorResponse({
       statusCode: 404,
       errorMessage: "Content not found.",
     });
   }
 
-  const courseData = await getEntryBySlug("courses", course);
+  const moduleData = await getEntryBySlug("modules", module);
 
-  if (!courseData) {
+  const lessonsPerModule = await getCollection("lessons", ({ slug }) =>
+    slug.includes(module)
+  );
+
+  if (!moduleData || lessonsPerModule.length === 0) {
     return errorResponse({
       statusCode: 404,
       errorMessage: "Content not found.",
     });
   }
 
-  const transformedCourse = transformCourse(courseData);
+  const transformedModule = transformModule(moduleData);
 
-  return new Response(JSON.stringify(transformedCourse), {
+  return new Response(JSON.stringify(transformedModule), {
     status: 200,
   });
 };
