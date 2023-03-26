@@ -14,11 +14,10 @@ interface Env {
 export const get: APIRoute = async ({ request }) => {
   const runtime = getRuntime<Env>(request);
 
-  if (runtime.env.ENVIRONMENT === "development") {
-    errorResponse({ errorMessage: "You are in dev mode.", statusCode: 404 });
-  } else {
-    errorResponse({ errorMessage: "You are in production.", statusCode: 404 });
-  }
+  errorResponse({
+    errorMessage: `This is mode ${runtime.env.ENVIRONMENT}`,
+    statusCode: 404,
+  });
 
   const apiSecretKey = request.headers.get("X-API-KEY");
 
