@@ -8,20 +8,24 @@ import { getRuntime } from "@astrojs/cloudflare/runtime";
 
 interface Env {
   API_SECRET_KEY: string;
-  RANDOM_SECRET: string;
-  ENVIRONMENT: string;
 }
 
 export const get: APIRoute = async ({ request }) => {
   const runtime = getRuntime<Env>(request);
 
-  return new Response(
-    JSON.stringify({ message: `RANDOM_SECRET: ${runtime.env.RANDOM_SECRET}` }),
-    {}
-  );
+  if (import.meta.env.RANDOM_SECRET) {
+    return errorResponse({
+      errorMessage: `RANDOM SECRET: ${import.meta.env.RANDOM_SECRET}`,
+      statusCode: 404,
+    });
+  } else {
+    return errorResponse({
+      errorMessage: `RANDOM SECRET: ${import.meta.env.RANDOM_SECRET}`,
+      statusCode: 404,
+    });
+  }
 
   // const apiSecretKey = request.headers.get("X-API-KEY");
-  // ``;
 
   // if (
   //   !apiSecretKey ||
