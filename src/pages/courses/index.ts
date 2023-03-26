@@ -8,14 +8,17 @@ import { getRuntime } from "@astrojs/cloudflare/runtime";
 
 interface Env {
   API_SECRET_KEY: string;
+  ENVIRONMENT: string;
 }
 
 export const get: APIRoute = async ({ request }) => {
-  if (import.meta.env.SSR) {
-    errorResponse({ errorMessage: "You are in SSR.", statusCode: 404 });
-  }
-
   const runtime = getRuntime<Env>(request);
+
+  if (runtime.env.ENVIRONMENT === "development") {
+    errorResponse({ errorMessage: "You are in dev mode.", statusCode: 404 });
+  } else {
+    errorResponse({ errorMessage: "You are in production.", statusCode: 404 });
+  }
 
   const apiSecretKey = request.headers.get("X-API-KEY");
 
