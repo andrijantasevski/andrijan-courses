@@ -1,3 +1,4 @@
+import { localEnv } from "env";
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
@@ -13,7 +14,7 @@ export const get: APIRoute = async ({ request }) => {
   const runtime = getRuntime<Env>(request);
 
   const apiSecretKeyEnv =
-    import.meta.env.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;
+    localEnv?.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;
 
   const apiSecretKey = request.headers.get("X-API-KEY");
 
