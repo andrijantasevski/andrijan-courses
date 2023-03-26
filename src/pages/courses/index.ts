@@ -8,6 +8,10 @@ import { transformCourse } from "@utils/dataTransformers";
 export const get: APIRoute = async ({ request }) => {
   const apiSecretKey = request.headers.get("X-API-KEY");
 
+  if (!import.meta.env.API_SECRET_KEY) {
+    return errorResponse({ errorMessage: "No env variable.", statusCode: 404 });
+  }
+
   if (
     !apiSecretKey ||
     !timingSafeEqual(apiSecretKey, import.meta.env.API_SECRET_KEY)
