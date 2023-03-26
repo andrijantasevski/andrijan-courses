@@ -11,6 +11,10 @@ interface Env {
 }
 
 export const get: APIRoute = async ({ request }) => {
+  if (import.meta.env.SSR) {
+    errorResponse({ errorMessage: "You are in SSR.", statusCode: 404 });
+  }
+
   const runtime = getRuntime<Env>(request);
 
   const apiSecretKey = request.headers.get("X-API-KEY");
