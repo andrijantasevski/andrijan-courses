@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+export interface CloudflareEnv {
+  API_SECRET_KEY: string;
+}
+
 function parseLocalEnv() {
   const schema = z.object({
     API_SECRET_KEY: z.string(),

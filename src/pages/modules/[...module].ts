@@ -1,26 +1,35 @@
-// import { env } from "env";
+import { localEnv } from "env";
 import type { APIRoute } from "astro";
 import { getCollection, getEntryBySlug } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
 import { transformLessonLight, transformModule } from "@utils/dataTransformers";
+import { getRuntime } from "@astrojs/cloudflare/runtime";
+import type { CloudflareEnv } from "env";
 
 export const get: APIRoute = async ({ params, request }) => {
+  const runtime = getRuntime<CloudflareEnv>(request);
+
+  const apiSecretKeyEnv =
+    localEnv?.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;
+
+  if (!apiSecretKeyEnv) {
+    return errorResponse({
+      statusCode: 500,
+      errorMessage: "Missing API_SECRET_KEY environment variable",
+    });
+  }
+
   const apiSecretKey = request.headers.get("X-API-KEY");
 
-  if (
-    !apiSecretKey ||
-    !timingSafeEqual(apiSecretKey, import.meta.env.API_SECRET_KEY)
-  ) {
+  if (!apiSecretKey || !timingSafeEqual(apiSecretKey, apiSecretKeyEnv)) {
     return errorResponse({
       statusCode: 403,
       errorMessage: "Unauthorized access.",
     });
   }
 
-  const url = new URL(request.url);
-
-  const module = url.searchParams.get("module");
+  const { module } = params;
 
   if (!module) {
     return errorResponse({

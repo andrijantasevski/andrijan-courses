@@ -5,13 +5,10 @@ import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
 import { transformCourse } from "@utils/dataTransformers";
 import { getRuntime } from "@astrojs/cloudflare/runtime";
-
-interface Env {
-  API_SECRET_KEY: string;
-}
+import type { CloudflareEnv } from "env";
 
 export const get: APIRoute = async ({ request }) => {
-  const runtime = getRuntime<Env>(request);
+  const runtime = getRuntime<CloudflareEnv>(request);
 
   const apiSecretKeyEnv =
     localEnv?.API_SECRET_KEY ?? runtime.env.API_SECRET_KEY;

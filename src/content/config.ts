@@ -9,12 +9,14 @@ const coursesCollection = defineCollection({
 const modulesCollection = defineCollection({
   schema: z.object({
     moduleTitle: z.string(),
+    moduleOrder: z.number(),
   }),
 });
 
 const lessonsCollection = defineCollection({
   schema: z.object({
     lessonTitle: z.string(),
+    lessonOrder: z.number(),
   }),
 });
 

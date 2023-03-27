@@ -17,6 +17,7 @@ export function transformModule(module: CollectionEntry<"modules">) {
     collection: module.collection,
     moduleUrl: `/courses/${module.slug}`,
     moduleTitle: module.data.moduleTitle,
+    moduleOrder: module.data.moduleOrder,
   };
 }
 
@@ -27,5 +28,27 @@ export function transformLessonLight(lesson: CollectionEntry<"lessons">) {
     collection: lesson.collection,
     lessonUrl: `/courses/${lesson.slug}`,
     lessonTitle: lesson.data.lessonTitle,
+    lessonOrder: lesson.data.lessonOrder,
+  };
+}
+
+export async function transformLesson(lesson: CollectionEntry<"lessons">) {
+  const { headings } = await lesson.render();
+
+  const [courseSlug, moduleSlug] = lesson.slug.split("/");
+
+  return {
+    id: lesson.id,
+    slug: lesson.slug,
+    collection: lesson.collection,
+    courseSlug,
+    courseUrl: `/courses/${courseSlug}`,
+    moduleSlug: `${courseSlug}/${moduleSlug}`,
+    moduleUrl: `/courses/${courseSlug}/${moduleSlug}`,
+    lessonUrl: `/courses/${courseSlug}`,
+    lessonTitle: lesson.data.lessonTitle,
+    lessonOrder: lesson.data.lessonOrder,
+    lessonContent: lesson.body,
+    lessonHeadings: headings,
   };
 }
