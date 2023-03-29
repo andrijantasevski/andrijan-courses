@@ -6,6 +6,7 @@ import errorResponse from "@utils/errorResponse";
 import { transformLesson } from "@utils/dataTransformers";
 import { getRuntime } from "@astrojs/cloudflare/runtime";
 import type { CloudflareEnv } from "env";
+import getPreviousNextPage from "@utils/paginationHelpers";
 
 export const get: APIRoute = async ({ params, request }) => {
   const runtime = getRuntime<CloudflareEnv>(request);
@@ -49,32 +50,12 @@ export const get: APIRoute = async ({ params, request }) => {
 
   const transformedLesson = await transformLesson(lessonData);
 
-  const lessonsPerModule = await getCollection("lessons", ({ slug }) =>
-    slug.includes(transformedLesson.moduleSlug)
-  );
-
-  const sortedLessonsPerModule = [...lessonsPerModule].sort(
-    (a, b) => a.data.lessonOrder - b.data.lessonOrder
-  );
-
-  const transformedLessonIndex = sortedLessonsPerModule.findIndex(
-    (lesson) => lesson.slug === transformedLesson.slug
-  );
-
-  const prevLesson =
-    transformedLessonIndex - 1 >= 0
-      ? sortedLessonsPerModule[transformedLessonIndex - 1]
-      : null;
-
-  const nextLesson =
-    sortedLessonsPerModule.length === transformedLessonIndex + 1
-      ? null
-      : sortedLessonsPerModule[transformedLessonIndex + 1];
+  const { prevPage, nextPage } = await getPreviousNextPage(transformedLesson);
 
   const lesson = {
     ...transformedLesson,
-    prevLesson,
-    nextLesson,
+    prevPage,
+    nextPage,
   };
 
   return new Response(JSON.stringify(lesson), {

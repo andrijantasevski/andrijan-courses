@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import type { AsyncReturnType } from "type-fest";
 
 export function transformCourse(course: CollectionEntry<"courses">) {
   return {
@@ -52,3 +53,8 @@ export async function transformLesson(lesson: CollectionEntry<"lessons">) {
     lessonHeadings: headings,
   };
 }
+
+export type TransformedCourse = ReturnType<typeof transformCourse>;
+export type TransformedModule = ReturnType<typeof transformModule>;
+export type TransformedLightLesson = ReturnType<typeof transformLessonLight>;
+export type TransformedLesson = AsyncReturnType<typeof transformLesson>;
