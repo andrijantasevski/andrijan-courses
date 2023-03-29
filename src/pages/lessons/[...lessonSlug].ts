@@ -1,6 +1,6 @@
 import { localEnv } from "env";
 import type { APIRoute } from "astro";
-import { getCollection, getEntryBySlug } from "astro:content";
+import { getEntryBySlug } from "astro:content";
 import timingSafeEqual from "@utils/timingSafeEqual";
 import errorResponse from "@utils/errorResponse";
 import { transformLesson } from "@utils/dataTransformers";
