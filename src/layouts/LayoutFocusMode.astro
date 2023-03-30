@@ -32,7 +32,7 @@ const { course, modules } = courseTree[0];
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -42,10 +42,12 @@ const { course, modules } = courseTree[0];
 
     <Scripts />
   </head>
-  <body class="relative bg-white text-black dark:bg-black dark:text-neutral-50">
+  <body
+    class="relative bg-white text-black scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-thumb-rounded-xl dark:bg-black dark:text-neutral-50 dark:scrollbar-thumb-neutral-800"
+  >
     <main class="flex">
       <aside
-        class="sticky inset-y-0 hidden h-screen w-96 shrink-0 flex-col gap-6 overflow-y-auto bg-neutral-100 py-6 dark:bg-neutral-900 lg:flex"
+        class="sticky inset-y-0 hidden h-screen shrink-0 flex-col gap-6 overflow-y-auto bg-neutral-100 py-6 scrollbar-thin scrollbar-thumb-neutral-400 scrollbar-thumb-rounded-xl dark:bg-neutral-900 dark:scrollbar-thumb-neutral-800 lg:flex lg:w-80 2xl:w-96"
       >
         <div class="flex items-center justify-between px-6">
           <Link

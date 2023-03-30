@@ -1,13 +1,18 @@
----
+import type { MDXInstance } from "astro";
 import type { Course, Lesson, Module } from "src/types/types";
-import { cleanUpUrlFromContentAndMDX } from "./generateCourseTree";
 
-export async function generateCourseTree(course: string) {
-  const courses = await Astro.glob<Course>("/content/courses/*/index.mdx");
+interface GenerateCourseTreeProps {
+  courses: MDXInstance<Course>[];
+  modules: MDXInstance<Module>[];
+  lessons: MDXInstance<Lesson>[];
+}
 
-  const modules = await Astro.glob<Module>("/content/courses/*/*/index.mdx");
+export function cleanUpUrlFromContentAndMDX(url: string) {
+  return url.replace(/^content\/|(\/index)?\.mdx$/g, "/");
+}
 
-  const lessons = await Astro.glob<Lesson>("/content/courses/*/*/*.mdx");
+export function generateCourseTree(props: GenerateCourseTreeProps) {
+  const { courses, modules, lessons } = props;
 
   const coursesObjects = courses.map((course) => {
     return {
@@ -20,7 +25,6 @@ export async function generateCourseTree(course: string) {
     return {
       moduleUrl: cleanUpUrlFromContentAndMDX(module.url ?? ""),
       moduleTitle: module.frontmatter.moduleTitle,
-      moduleOrder: module.frontmatter.moduleOrder
     };
   });
 
@@ -29,7 +33,6 @@ export async function generateCourseTree(course: string) {
       return {
         lessonUrl: cleanUpUrlFromContentAndMDX(lesson.url ?? ""),
         lessonTitle: lesson.frontmatter.lessonTitle,
-        lessonOrder: lesson.frontmatter.lessonOrder,
       };
     }
   });
@@ -43,8 +46,6 @@ export async function generateCourseTree(course: string) {
       const filteredLessons = lessonsObjects.filter((lesson) =>
         lesson?.lessonUrl?.includes(module.moduleUrl)
       );
-
-      const sortedLessons = filteredLessons.sort((a, b) => (a?.lessonOrder as number) - (b?.lessonOrder as number))
 
       return {
         ...module,
@@ -60,4 +61,3 @@ export async function generateCourseTree(course: string) {
 
   return coursesData;
 }
----
