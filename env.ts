@@ -22,5 +22,4 @@ function parseLocalEnv() {
   return safelyParsedSchema.data;
 }
 
-export const localEnv =
-  import.meta.env.MODE === "development" ? parseLocalEnv() : null;
+export const localEnv = parseLocalEnv();
